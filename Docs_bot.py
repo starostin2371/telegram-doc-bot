@@ -8,8 +8,6 @@ import os
 import re
 from openai import OpenAI
 
-# Настройки путей
-pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
 
 # Ключи
 TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN")
@@ -157,4 +155,10 @@ if __name__ == "__main__":
     app.add_handler(MessageHandler(filters.Document.ALL, handle_document))
     app.add_handler(MessageHandler(filters.PHOTO, handle_photo))
     print("Бот запущен")
-    app.run_polling()
+
+    # Webhook для Fly.io
+    app.run_webhook(
+        listen="0.0.0.0",
+        port=8080,
+        webhook_url="https://docs-dry-pine-9824.fly.dev"
+    )
